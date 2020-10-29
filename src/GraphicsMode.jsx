@@ -1,52 +1,21 @@
-import React from 'react';
-import { Grid, Typography, TextField, Button, Icon } from '@material-ui/core';
-import fileFish from './constant/fileFish';
-import { v4 as uuidv4 } from 'uuid';
-import { makeStyles } from '@material-ui/core/styles';
+import React from "react";
+import { Grid, Typography, TextField, Button, Icon } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import GraphicsModeSection from "./GraphicsModeSection";
 
 const useStyles = makeStyles(() => ({
-  titleSection: {
-    marginBottom: '1rem',
-    marginTop: '1rem',
-    marginLeft: '.5rem',
-  },
   textField: {
-    padding: '1rem .5rem',
+    padding: "1rem .5rem",
   },
 }));
 
-function GraphicsMode() {
+function GraphicsMode(props) {
   const classes = useStyles();
   return (
     <Grid container direction="column" item xs={12}>
-      {fileFish.map(({ nameSection, property }) => {
-        return (
-          <Grid container direction="column" item key={uuidv4()}>
-            <Grid item>
-              <Typography className={classes.titleSection} variant="h6">
-                {nameSection}
-              </Typography>
-            </Grid>
-            {property.map(({ rule, value }) => {
-              return (
-                <Grid item xs={10} className={classes.textField} key={uuidv4()}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    type={typeof value === 'number' ? 'number' : 'text'}
-                    name={rule}
-                    label={rule}
-                    variant="outlined"
-                    value={value}
-                  />
-                </Grid>
-              );
-            })}
-          </Grid>
-        );
-      })}
-      <Grid item xs={10} container justify="space-between">
-        <Grid item xs={10}>
+      <GraphicsModeSection file={props.file} />
+      <Grid item xs={12} container justify="space-between">
+        <Grid item xs={12}>
           <Typography className={classes.titleSection} variant="h6">
             Новое правило
           </Typography>
@@ -74,10 +43,29 @@ function GraphicsMode() {
           />
         </Grid>
       </Grid>
-      <Grid item>
-        <Button variant="contained" color="primary" startIcon={<Icon>add</Icon>}>
-          Добавить новую секцию
-        </Button>
+      <Grid container justify="flex-end" item style={{ margin: "1rem 0" }}>
+        <Grid item>
+          <Button
+            size="small"
+            variant="contained"
+            style={{ marginRight: "1rem" }}
+            color="primary"
+            startIcon={<Icon>add</Icon>}
+          >
+            Добавить новую секцию
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            startIcon={<Icon>save</Icon>}
+          >
+            Сохранить
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );

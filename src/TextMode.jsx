@@ -1,22 +1,100 @@
-import React from 'react';
-import { Grid, TextField, Button, Icon } from '@material-ui/core';
+import React, { useState, useEffect } from "react";
+import { Grid, TextField, Button, Icon, Typography } from "@material-ui/core";
+import { v4 as uuidv4 } from "uuid";
 
-function TextMode() {
+function TextMode(props) {
+  const [fileContent, setFileContent] = useState();
+
+  const contentFileToString = (content) => {
+    let contentString = "";
+    let countSection = 0;
+    if (typeof content === "object") {
+      for (let section of content) {
+        contentString += countSection
+          ? `\n[${section.nameSection}]\n`
+          : `[${section.nameSection}]\n`;
+        for (let property in section.rules) {
+          contentString += `${property} = ${section.rules[property]}\n`;
+        }
+        countSection++;
+      }
+      return setFileContent(contentString);
+    }
+
+    return setFileContent("");
+  };
+
+  const saveFile = () => {
+    let newContent = [];
+    let regex = {
+      section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
+      rules: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
+      comment: /^\s*;.*$/,
+    };
+    let fileContentLines = fileContent.split(/[\r\n]+/);
+    let newSectionId = null;
+    fileContentLines.forEach((line) => {
+      if (regex.comment.test(line)) {
+        return;
+      } else if (regex.section.test(line)) {
+        let section = line.match(regex.section)[1];
+        newSectionId = uuidv4();
+        newContent = [
+          ...newContent,
+          { nameSection: section, sectionId: newSectionId },
+        ];
+      } else if (regex.rules.test(line)) {
+        let rule = line.match(regex.rules);
+        newContent = newContent.map((contentSection) => {
+          const { nameSection, sectionId, rules } = contentSection;
+          if (sectionId === newSectionId) {
+            return {
+              nameSection: nameSection,
+              sectionId: sectionId,
+              rules: { ...rules, [rule[1]]: rule[2] },
+            };
+          } else return contentSection;
+        });
+      } else if (line.length === 0 && newSectionId) {
+        newSectionId = null;
+      }
+    });
+
+    props.editContentFile(props.file.id, newContent);
+  };
+
+  useEffect(() => {
+    contentFileToString(props.file.content);
+  }, [props.file.content]);
+
   return (
     <div>
       <Grid container direction="column" item xs={12} spacing={4}>
-        <Grid item xs={10}>
+        <Grid item>
+          <Typography variant="h6">Редактирование файла</Typography>
+        </Grid>
+        <Grid item xs={12}>
           <TextField
             fullWidth
-            label="fileName"
+            label={`${props.file.fileName}.ini`}
             multiline
-            rows={12}
-            defaultValue="textFile"
+            value={fileContent}
+            onChange={(e) => setFileContent(e.target.value)}
             variant="outlined"
+            rows={24}
           />
         </Grid>
-        <Grid item>
-          <Button variant="contained" color="primary" startIcon={<Icon>save</Icon>}>
+        <Grid
+          item
+          xs={12}
+          style={{ display: "flex", justifyContent: "flex-end" }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Icon>save</Icon>}
+            onClick={saveFile}
+          >
             Сохранить
           </Button>
         </Grid>

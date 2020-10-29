@@ -1,13 +1,29 @@
-import React from 'react';
-import TextMode from './TextMode';
-import GraphicsMode from './GraphicsMode';
-import SwitchMode from './SwitchMode';
+import React from "react";
+import TextMode from "./TextMode";
+import GraphicsMode from "./GraphicsMode";
+import SwitchMode from "./SwitchMode";
 
 function Editor(props) {
   return (
-    <div style={{ position: 'relative' }}>
-      <SwitchMode changeMode={props.changeMode} />
-      {props.mode ? <GraphicsMode /> : <TextMode />}
+    <div style={{ position: "relative" }}>
+      {!!props.selectedFileId ? (
+        <>
+          <SwitchMode changeMode={props.changeMode} />
+          {props.mode ? (
+            <TextMode
+              file={props.file}
+              editContentFile={props.editContentFile}
+            />
+          ) : (
+            <GraphicsMode
+              file={props.file}
+              editContentFile={props.editContentFile}
+            />
+          )}
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
