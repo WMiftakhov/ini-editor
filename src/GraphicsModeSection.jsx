@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, TextField } from "@material-ui/core";
-import { v4 as uuidv4 } from "uuid";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Divider,
+  Icon,
+  Box,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
@@ -12,51 +18,71 @@ const useStyles = makeStyles(() => ({
   textField: {
     padding: "1rem .5rem",
   },
+  linePlusRule: {
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    height: "1.5rem",
+  },
+  boxAddRules: {
+    position: "absolute",
+    right: "0",
+    display: "flex",
+    alignItems: "center",
+    background: "#fff",
+    padding: "0.1rem 1rem",
+    border: "1px solid rgba(0, 0, 0, 0.12)",
+    borderRadius: "0.25rem",
+    transition: '.5s',
+    '&:hover': {
+      borderColor: "rgba(245, 0, 87, .5)"
+    }
+  }
 }));
 
 function GraphicsModeSection(props) {
-  const [newContent, setNewContent] = useState(props.file.content || []);
-  const [test, setTest] = useState("");
+  const {
+    newContent,
+    setNewContent,
+    newSectionValue,
+    setNewSectionValue,
+    handlerChangeProperty,
+    handlerAddRulesInSection,
+    handlerAddRulesToNewContent,
+  } = props;
 
   const classes = useStyles();
 
-  const handlerChangeProperty = (e, sectionId) => {
-    const { name, value } = e.target;
-    setNewContent([
-      ...newContent.map((section) => {
-        if (section.sectionId === sectionId) {
-          return { ...section, rules: { ...section.rules, [name]: value } };
-        } else {
-          return section;
-        }
-      }),
-    ]);
-  };
-
   return (
     <>
-      {newContent.map(({ sectionId, nameSection, rules }) => {
+      {newContent.map(({ sectionId, nameSection, rules }, sectionIndex) => {
         return (
-          <Grid key={uuidv4()} container direction="column" item>
+          <Grid
+            key={`section-${sectionIndex}`}
+            container
+            direction="column"
+            item
+          >
             <Grid item>
               <Typography className={classes.titleSection} variant="h6">
                 {nameSection}
               </Typography>
             </Grid>
             {rules &&
-              Object.keys(rules).map((property) => {
+              Object.keys(rules).map((property, rulesIndex) => {
                 return (
                   <Grid
                     item
                     xs={12}
                     className={classes.textField}
-                    key={uuidv4()}
+                    key={`section-${sectionIndex}-rules-${rulesIndex}`}
                   >
                     <TextField
                       fullWidth
                       size="small"
                       type={
-                        typeof rules[property] === "number" ? "number" : "text"
+                        isNaN(parseInt(rules[property])) ? "text" : "number"
                       }
                       name={property}
                       label={property}
@@ -67,6 +93,85 @@ function GraphicsModeSection(props) {
                   </Grid>
                 );
               })}
+            {!!newSectionValue.rules &&
+            newSectionValue.nameSection === nameSection &&
+              Object.keys(newSectionValue.rules).map(
+                (property, indexNewRules) => {
+                  return (
+                    <Grid
+                      key={`section-${sectionIndex}-rules-${indexNewRules}`}
+                      item
+                      xs={12}
+                      container
+                      justify="space-between"
+                      alignItems="center"
+                    >
+                      <Grid className={classes.textField} item>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          type="text"
+                          name={property}
+                          label="Название"
+                          variant="outlined"
+                          value={property}
+                          onChange={(e) =>
+                            setNewSectionValue({
+                              ...newSectionValue,
+                              rules: {
+                                [e.target.value]:
+                                  newSectionValue.rules[property],
+                              },
+                            })
+                          }
+                        />
+                      </Grid>
+                      <Grid className={classes.textField} item>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          type="text"
+                          name={property}
+                          label="Значение"
+                          variant="outlined"
+                          value={newSectionValue.rules[property]}
+                          onChange={(e) =>
+                            setNewSectionValue({
+                              ...newSectionValue,
+                              rules: { [property]: e.target.value },
+                            })
+                          }
+                        />
+                      </Grid>
+                      <Grid>
+                        <Icon
+                          color="secondary"
+                          aria-label="delete"
+                          onClick={() =>
+                            handlerAddRulesToNewContent(nameSection, sectionId)
+                          }
+                        >
+                          done
+                        </Icon>
+                      </Grid>
+                    </Grid>
+                  );
+                }
+              )}
+
+            <Box className={classes.linePlusRule}>
+              <Divider />
+              <Box className={classes.boxAddRules} onClick={() => handlerAddRulesInSection(nameSection)}>
+                <span style={{marginRight: '1rem'}}>Добавить правило</span>
+                <Icon
+                  color="secondary"
+                  size="small"
+                  aria-label="delete"
+                >
+                  add_circle
+                </Icon>
+              </Box>
+            </Box>
           </Grid>
         );
       })}

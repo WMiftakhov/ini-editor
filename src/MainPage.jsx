@@ -44,7 +44,7 @@ const MainPage = () => {
     setFiles([
       ...files.map((file) => {
         if (file.id === fileId) {
-          return { ...file, [name]: value, edit: false };
+          return { ...file, [name]: value, edit: false, changed: convertDate() };
         } else {
           return file;
         }
@@ -56,7 +56,7 @@ const MainPage = () => {
     setFiles([
       ...files.map((file) => {
         if (file.id === fileId) {
-          return { ...file, content };
+          return { ...file, content, changed: convertDate() };
         } else {
           return file;
         }
@@ -88,7 +88,7 @@ const MainPage = () => {
       <Grid item md={10} xl={6}>
         <EditorWrapper>
           <Grid container spacing={4} style={{ minHeight: "620px" }}>
-            <Grid className={classes.fileListColumn} item xs={4}>
+            <Grid className={classes.fileListColumn} item xs={12} md={4}>
               <FilesList
                 files={files}
                 handlerCreateFile={handlerCreateFile}
@@ -97,7 +97,7 @@ const MainPage = () => {
                 handlerSelectedFile={handlerSelectedFile}
               />
             </Grid>
-            <Grid container direction={"column"} item xs={8}>
+            <Grid container direction={"column"} item xs={12} md={8}>
               <Grid item>
                 <Editor
                   editContentFile={editContentFile}
