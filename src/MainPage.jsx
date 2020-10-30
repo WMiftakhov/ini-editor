@@ -72,6 +72,9 @@ const MainPage = () => {
   const deleteFile = (id) => {
     if (selectedFileId.id === id) setSelectedFileId('');
     setFiles([...files.filter((file) => file.id !== id)]);
+    if (selectedFileId === id) {
+      setSelectedFileId("")
+    }
   };
 
   useEffect(() => {
