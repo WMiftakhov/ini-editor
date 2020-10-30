@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Grid, TextField, Button, Icon, Typography } from "@material-ui/core";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState, useEffect } from 'react';
+import { Grid, TextField, Button, Icon, Box } from '@material-ui/core';
+import { v4 as uuidv4 } from 'uuid';
 
 function TextMode(props) {
   const [fileContent, setFileContent] = useState();
 
   const contentFileToString = (content) => {
-    let contentString = "";
+    let contentString = '';
     let countSection = 0;
-    if (typeof content === "object") {
+    if (typeof content === 'object') {
       for (let section of content) {
         contentString += countSection
           ? `\n[${section.nameSection}]\n`
@@ -21,7 +21,7 @@ function TextMode(props) {
       return setFileContent(contentString);
     }
 
-    return setFileContent("");
+    return setFileContent('');
   };
 
   const saveFile = () => {
@@ -39,10 +39,7 @@ function TextMode(props) {
       } else if (regex.section.test(line)) {
         let section = line.match(regex.section)[1];
         newSectionId = uuidv4();
-        newContent = [
-          ...newContent,
-          { nameSection: section, sectionId: newSectionId },
-        ];
+        newContent = [...newContent, { nameSection: section, sectionId: newSectionId }];
       } else if (regex.rules.test(line)) {
         let rule = line.match(regex.rules);
         newContent = newContent.map((contentSection) => {
@@ -68,12 +65,9 @@ function TextMode(props) {
   }, [props.file.content]);
 
   return (
-    <div>
-      <Grid container direction="column" item xs={12} spacing={4}>
-        <Grid item>
-          <Typography variant="h6">Редактирование файла</Typography>
-        </Grid>
-        <Grid item xs={12}>
+    <Grid container direction="column" item xs={12}>
+      <Grid item xs={12}>
+        <Box mt={4} mb={4}>
           <TextField
             fullWidth
             label={`${props.file.fileName}.ini`}
@@ -81,25 +75,20 @@ function TextMode(props) {
             value={fileContent}
             onChange={(e) => setFileContent(e.target.value)}
             variant="outlined"
-            rows={24}
+            rows={22}
           />
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          style={{ display: "flex", justifyContent: "flex-end" }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Icon>save</Icon>}
-            onClick={saveFile}
-          >
-            Сохранить
-          </Button>
-        </Grid>
+        </Box>
       </Grid>
-    </div>
+      <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Icon>save</Icon>}
+          onClick={saveFile}>
+          Сохранить
+        </Button>
+      </Grid>
+    </Grid>
   );
 }
 

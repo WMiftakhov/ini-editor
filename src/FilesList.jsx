@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   List,
   ListItem,
@@ -8,9 +8,9 @@ import {
   Grid,
   Typography,
   Icon,
-} from "@material-ui/core/";
-import { v4 as uuidv4 } from "uuid";
-import EditFileName from "./EditFileName";
+} from '@material-ui/core/';
+import { v4 as uuidv4 } from 'uuid';
+import EditFileName from './EditFileName';
 
 function FilesList(props) {
   return (
@@ -18,57 +18,55 @@ function FilesList(props) {
       <Typography variant="h6">Список файлов</Typography>
       <List>
         {!!props.files && !!props.files.length
-          ? props.files.map(
-              ({ id, fileName, created, changed, edit, content }) => {
-                if (edit) {
-                  return (
-                    <EditFileName
-                      key={uuidv4()}
-                      id={id}
-                      fileName={fileName}
-                      onChangeNameFile={props.onChangeNameFile}
-                    />
-                  );
-                }
+          ? props.files.map(({ id, fileName, created, changed, edit, content }) => {
+              if (edit) {
                 return (
-                  <ListItem
+                  <EditFileName
                     key={uuidv4()}
-                    onClick={() => props.handlerSelectedFile(id)}
-                    button
-                  >
-                    <ListItemIcon>
-                      <Icon>description</Icon>
-                    </ListItemIcon>
-                    <ListItemText
-                      style={{ whiteSpace: "pre-line" }}
-                      primary={`${fileName}.ini`}
-                      secondary={
-                        changed
-                          ? `Изменено:\n${changed}`
-                          : `Создано:\n${created}`
-                      }
-                    />
-                    <ListItemSecondaryAction>
-                      <Icon
-                        onClick={() => props.deleteFile(id)}
-                        color="secondary"
-                        aria-label="delete"
-                      >
-                        delete
-                      </Icon>
-                    </ListItemSecondaryAction>
-                  </ListItem>
+                    id={id}
+                    fileName={fileName}
+                    onChangeNameFile={props.onChangeNameFile}
+                  />
                 );
               }
-            )
-          : ""}
+              return (
+                <ListItem key={uuidv4()} onClick={() => props.handlerSelectedFile(id)} button>
+                  <ListItemIcon>
+                    <Icon style={{ margin: '0 auto' }}>description</Icon>
+                  </ListItemIcon>
+                  <ListItemText
+                    style={{ whiteSpace: 'pre-line' }}
+                    primary={`${fileName}.ini`}
+                    secondary={changed ? `Изменено:\n${changed}` : `Создано:\n${created}`}
+                  />
+                  <ListItemSecondaryAction style={{ cursor: 'pointer' }}>
+                    <Icon
+                      onClick={() => props.deleteFile(id)}
+                      color="secondary"
+                      aria-label="delete">
+                      delete
+                    </Icon>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            })
+          : ''}
 
-        <ListItem button onClick={props.handlerCreateFile}>
-          <ListItemIcon>
-            <Icon color="primary">add_circle</Icon>
-          </ListItemIcon>
-          <ListItemText primary="Создать файл" />
-        </ListItem>
+        {!props.files.filter((file) => file.edit).length ? (
+          <>
+            {' '}
+            <ListItem button onClick={props.handlerCreateFile}>
+              <ListItemIcon>
+                <Icon style={{ margin: '0 auto' }} color="primary">
+                  add_circle
+                </Icon>
+              </ListItemIcon>
+              <ListItemText primary="Создать файл" />
+            </ListItem>
+          </>
+        ) : (
+          ''
+        )}
       </List>
     </Grid>
   );
