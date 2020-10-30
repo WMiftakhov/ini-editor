@@ -68,8 +68,6 @@ function GraphicsMode(props) {
     setNewSection('');
   };
 
-  console.log(newSection);
-
   return (
     <Grid container direction="column" item xs={12}>
       <GraphicsModeSection
