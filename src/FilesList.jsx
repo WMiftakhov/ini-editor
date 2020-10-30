@@ -11,8 +11,27 @@ import {
 } from '@material-ui/core/';
 import { v4 as uuidv4 } from 'uuid';
 import EditFileName from './EditFileName';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  iconCenter: {
+    margin: '0 auto',
+  },
+  deleteIcon: {
+    cursor: 'pointer',
+    '& span': {
+      color: 'grey',
+      transition: 'all .5s',
+    },
+    '&:hover span': {
+      color: theme.palette.secondary.main,
+    },
+  },
+}));
 
 function FilesList(props) {
+  const classes = useStyles();
+
   return (
     <Grid item xs={12}>
       <Typography variant="h6">Список файлов</Typography>
@@ -32,17 +51,17 @@ function FilesList(props) {
               return (
                 <ListItem key={uuidv4()} onClick={() => props.handlerSelectedFile(id)} button>
                   <ListItemIcon>
-                    <Icon style={{ margin: '0 auto' }}>description</Icon>
+                    <Icon className={classes.iconCenter}>description</Icon>
                   </ListItemIcon>
                   <ListItemText
                     style={{ whiteSpace: 'pre-line' }}
                     primary={`${fileName}.ini`}
                     secondary={changed ? `Изменено:\n${changed}` : `Создано:\n${created}`}
                   />
-                  <ListItemSecondaryAction style={{ cursor: 'pointer' }}>
+                  <ListItemSecondaryAction className={classes.deleteIcon}>
                     <Icon
+                      className={`${classes.iconCenter}`}
                       onClick={() => props.deleteFile(id)}
-                      color="secondary"
                       aria-label="delete">
                       delete
                     </Icon>
@@ -54,10 +73,9 @@ function FilesList(props) {
 
         {!props.files.filter((file) => file.edit).length ? (
           <>
-            {' '}
             <ListItem button onClick={props.handlerCreateFile}>
               <ListItemIcon>
-                <Icon style={{ margin: '0 auto' }} color="primary">
+                <Icon color="primary" className={classes.iconCenter}>
                   add_circle
                 </Icon>
               </ListItemIcon>

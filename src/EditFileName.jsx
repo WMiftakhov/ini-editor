@@ -5,6 +5,8 @@ import {
   Icon,
   ListItemSecondaryAction,
   TextField,
+  Tooltip,
+  Fade,
 } from '@material-ui/core';
 
 function EditFileName(props) {
@@ -22,12 +24,13 @@ function EditFileName(props) {
         onChange={(e) => setChangeInputValue(e.target.value)}
       />
       <ListItemSecondaryAction style={{ cursor: 'pointer' }}>
-        <Icon
-          color="secondary"
-          onClick={() => props.onChangeNameFile('fileName', inputValue, props.id)}
-          aria-label="delete">
-          done
-        </Icon>
+        <Tooltip title="Добавить" TransitionComponent={Fade} TransitionProps={{ timeout: 500 }}>
+          <Icon
+            color="secondary"
+            onClick={() => props.onChangeNameFile('fileName', inputValue, props.id)}>
+            done
+          </Icon>
+        </Tooltip>
       </ListItemSecondaryAction>
     </ListItem>
   );

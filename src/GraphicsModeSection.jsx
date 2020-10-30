@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, TextField, Divider, Icon, Box } from '@material-ui/core';
+import { Grid, Typography, TextField, Divider, Icon, Box, Tooltip, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -138,12 +138,16 @@ function GraphicsModeSection(props) {
                         />
                       </Grid>
                       <Grid>
-                        <Icon
-                          color="secondary"
-                          aria-label="delete"
-                          onClick={() => handlerAddRulesToNewContent(nameSection, sectionId)}>
-                          done
-                        </Icon>
+                        <Tooltip
+                          title="Добавить"
+                          TransitionComponent={Fade}
+                          TransitionProps={{ timeout: 500 }}>
+                          <Icon
+                            color="secondary"
+                            onClick={() => handlerAddRulesToNewContent(nameSection, sectionId)}>
+                            done
+                          </Icon>
+                        </Tooltip>
                       </Grid>
                     </Grid>
                   );
@@ -155,7 +159,7 @@ function GraphicsModeSection(props) {
                 <Divider className={classes.hr} />
                 <Box className={classes.boxAddRules}>
                   <span style={{ marginRight: '1rem' }}>Добавить правило</span>
-                  <Icon color="primary" size="small" aria-label="delete">
+                  <Icon color="primary" size="small">
                     add
                   </Icon>
                 </Box>

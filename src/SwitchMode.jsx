@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonGroup, Button, Icon, Grid, Typography } from '@material-ui/core';
+import { ButtonGroup, Button, Icon, Grid, Typography, Tooltip, Fade } from '@material-ui/core';
 
 function SwitchMode(props) {
   return (
@@ -15,12 +15,22 @@ function SwitchMode(props) {
           color="primary"
           // style={{ position: 'absolute', right: 0, top: '1rem' }}
         >
-          <Button onClick={() => props.changeMode(1)}>
-            <Icon>view_headline</Icon>
-          </Button>
-          <Button onClick={() => props.changeMode(0)}>
-            <Icon>image</Icon>
-          </Button>
+          <Tooltip
+            title="Текстовый режим"
+            TransitionComponent={Fade}
+            TransitionProps={{ timeout: 600 }}>
+            <Button onClick={() => props.changeMode(1)}>
+              <Icon>view_headline</Icon>
+            </Button>
+          </Tooltip>
+          <Tooltip
+            title="Графический режим"
+            TransitionComponent={Fade}
+            TransitionProps={{ timeout: 500 }}>
+            <Button onClick={() => props.changeMode(0)}>
+              <Icon>image</Icon>
+            </Button>
+          </Tooltip>
         </ButtonGroup>
       </Grid>
     </Grid>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, TextField, Button, Icon } from '@material-ui/core';
+import { Grid, TextField, Button, Icon, Tooltip, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import GraphicsModeSection from './GraphicsModeSection';
 import { v4 as uuidv4 } from 'uuid';
@@ -98,9 +98,14 @@ function GraphicsMode(props) {
               />
             </Grid>
             <Grid>
-              <Icon color="secondary" aria-label="save" onClick={handlerAddNewSection}>
-                done
-              </Icon>
+              <Tooltip
+                title="Добавить"
+                TransitionComponent={Fade}
+                TransitionProps={{ timeout: 500 }}>
+                <Icon color="secondary" aria-label="save" onClick={handlerAddNewSection}>
+                  done
+                </Icon>
+              </Tooltip>
             </Grid>
           </Grid>
         )}
