@@ -1,41 +1,42 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
-import EditorWrapper from "./EditorWrapper";
-import FilesList from "./FilesList";
-import Editor from "./Editor";
-import { makeStyles } from "@material-ui/core/styles";
-import { v4 as uuidv4 } from "uuid";
-import { convertDate } from "./helpers/convertDate";
+import React, { useState, useEffect } from 'react';
+import { Grid } from '@material-ui/core';
+import EditorWrapper from './EditorWrapper';
+import FilesList from './FilesList';
+import Editor from './Editor';
+import { makeStyles } from '@material-ui/core/styles';
+import { v4 as uuidv4 } from 'uuid';
+import { convertDate } from './helpers/convertDate';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   fileListColumn: {
-    borderRight: "1px solid #eee",
-    minHeight: "100%",
+    borderRight: '1px solid #eee',
+    minHeight: '100%',
   },
   pageContainer: {
-    backgroundColor: "#f5f5f5",
-    minHeight: "100vh",
+    backgroundColor: '#f5f5f5',
+    minHeight: '100vh',
+  },
+  wrapper: {
+    minHeight: '620px',
   },
 }));
 
 const MainPage = () => {
   const classes = useStyles();
   const [mode, setMode] = useState(1);
-  const [files, setFiles] = useState(
-    JSON.parse(localStorage.getItem("iniFiles")) || []
-  );
-  const [selectedFileId, setSelectedFileId] = useState("");
+  const [files, setFiles] = useState(JSON.parse(localStorage.getItem('iniFiles')) || []);
+  const [selectedFileId, setSelectedFileId] = useState('');
 
   const handlerCreateFile = () => {
     setFiles([
       ...files,
       {
         id: uuidv4(),
-        fileName: "newFile",
+        fileName: 'newFile',
         created: convertDate(),
-        changed: "",
+        changed: '',
         edit: true,
-        content: "",
+        content: '',
       },
     ]);
   };
@@ -44,7 +45,7 @@ const MainPage = () => {
     setFiles([
       ...files.map((file) => {
         if (file.id === fileId) {
-          return { ...file, [name]: value, edit: false, changed: convertDate() };
+          return { ...file, [name]: value, edit: false };
         } else {
           return file;
         }
@@ -69,12 +70,12 @@ const MainPage = () => {
   };
 
   const deleteFile = (id) => {
-    if (selectedFileId.id === id) setSelectedFileId("");
+    if (selectedFileId.id === id) setSelectedFileId('');
     setFiles([...files.filter((file) => file.id !== id)]);
   };
 
   useEffect(() => {
-    localStorage.setItem("iniFiles", JSON.stringify(files));
+    localStorage.setItem('iniFiles', JSON.stringify(files));
   }, [files]);
 
   return (
@@ -83,11 +84,10 @@ const MainPage = () => {
       container
       justify="center"
       alignItems="center"
-      spacing={0}
-    >
+      spacing={0}>
       <Grid item md={10} xl={6}>
         <EditorWrapper>
-          <Grid container spacing={4} style={{ minHeight: "620px" }}>
+          <Grid container spacing={4} className={classes.wrapper}>
             <Grid className={classes.fileListColumn} item xs={12} md={4}>
               <FilesList
                 files={files}
@@ -97,7 +97,7 @@ const MainPage = () => {
                 handlerSelectedFile={handlerSelectedFile}
               />
             </Grid>
-            <Grid container direction={"column"} item xs={12} md={8}>
+            <Grid container direction={'column'} item xs={12} md={8}>
               <Grid item>
                 <Editor
                   editContentFile={editContentFile}

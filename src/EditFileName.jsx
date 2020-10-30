@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   ListItem,
   ListItemIcon,
   Icon,
   ListItemSecondaryAction,
   TextField,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 function EditFileName(props) {
   const [inputValue, setChangeInputValue] = useState(props.fileName);
@@ -13,7 +13,7 @@ function EditFileName(props) {
   return (
     <ListItem button>
       <ListItemIcon>
-        <Icon>description</Icon>
+        <Icon style={{ margin: '0 auto' }}>description</Icon>
       </ListItemIcon>
       <TextField
         size="small"
@@ -21,14 +21,11 @@ function EditFileName(props) {
         value={inputValue}
         onChange={(e) => setChangeInputValue(e.target.value)}
       />
-      <ListItemSecondaryAction>
+      <ListItemSecondaryAction style={{ cursor: 'pointer' }}>
         <Icon
           color="secondary"
-          onClick={() =>
-            props.onChangeNameFile("fileName", inputValue, props.id)
-          }
-          aria-label="delete"
-        >
+          onClick={() => props.onChangeNameFile('fileName', inputValue, props.id)}
+          aria-label="delete">
           done
         </Icon>
       </ListItemSecondaryAction>
